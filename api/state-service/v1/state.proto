@@ -1,6 +1,6 @@
 syntax = "proto3";
 package api.state_service.v1;
-option go_package = "github.com/amr0ny/solutions-proto-contracts/gen/go/api/v1;v1";
+option go_package = "github.com/amr0ny/solutions-proto-contracts/gen/go/api/state_service/v1;v1";
 
 
 enum StateType {
