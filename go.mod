@@ -1,4 +1,4 @@
-module github.com/amr0ny/solutions-proto-contracts/gen/go
+module github.com/amr0ny/solutions-proto-contracts
 
 go 1.24.0
 
