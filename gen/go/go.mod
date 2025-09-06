@@ -1,5 +1,4 @@
-module github.com/amr0ny/solutions-proto-contracts
-
+module github.com/amr0ny/solutions-proto-contracts/gen/go
 go 1.23.0
 
 toolchain go1.24.0
