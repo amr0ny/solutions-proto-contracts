@@ -1,0 +1,58 @@
+syntax = "proto3";
+package api.state_service.v1;
+option go_package = "gen/go/api/v1";
+
+enum StateType {
+    STATE_TYPE_UNSPECIFIED = 0; // Default value, should not be used.
+    STATE_TYPE_PENDING = 1; // Initial state when an entity is just started being processed.
+    STATE_TYPE_SYNCED = 2; // State indicating that the entity has been successfully synchronized.
+    STATE_TYPE_AWAITING_RETRY = 3; // State indicating that the entity is waiting for a retry after a failure.
+    STATE_TYPE_FAILED = 4; // State indicating that the entity is non-retriable.
+}
+
+message State {
+    StateType type = 1; // The type of the state.
+    optional uint32 retry_count = 2; // The number of retries attempted for the entity. Present only if the state type is AWAITING_RETRY.
+}
+
+enum ErrorCode {
+    ERROR_CODE_UNSPECIFIED = 0; // Default value, should not be used.
+}
+
+message Error {
+    ErrorCode code = 1; // The error code.
+    string message = 2; // A human-readable message providing more details about the error.
+}
+
+
+message EntityKey {
+    string entity_type = 1; // The type of the entity.
+    string entity_id = 2; // The unique identifier of the entity.
+}
+
+message GetStateRequest {
+    EntityKey key = 1; // The key of the entity whose state is being requested.
+}
+message GetStateResponse {
+    oneof result {
+        State state = 1; // The current state of the entity.
+        Error error = 2; // An error occurred while fetching the state.
+    }
+}
+
+message SetStateRequest {
+    EntityKey key = 1; // The key of the entity whose state is being set.
+    State state = 2; // The new state to be set for the entity.
+}
+
+message SetStateResponse {
+    oneof result {
+        bool success = 1; // Indicates whether the state was successfully set.
+        Error error = 2; // An error occurred while setting the state.
+    }
+}
+
+service StateService {
+    rpc GetState (GetStateRequest) returns (GetStateResponse); // Fetch the current state of an entity.
+    rpc SetState (SetStateRequest) returns (SetStateResponse); // Set the state of an entity.
+}
